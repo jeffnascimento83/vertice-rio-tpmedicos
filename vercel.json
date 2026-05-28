@@ -1,27 +1,3 @@
 {
-  "buildCommand": "echo 'No build required - static site'",
-  "devCommand": "python3 -m http.server 3030",
-  "installCommand": "echo 'No dependencies'",
-  "regions": ["iad1"],
-  "public": true,
-  "trailingSlash": false,
-  "headers": [
-    {
-      "source": "/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=3600"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        }
-      ]
-    }
-  ]
+  "trailingSlash": false
 }
