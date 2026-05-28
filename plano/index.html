@@ -295,11 +295,21 @@ input.nao-off{opacity:.35;pointer-events:none;background:var(--surf2);}
         <div class="fg"><label for="oferta">Oferta principal *</label><input type="text" id="oferta" placeholder="Ex: Avaliação gratuita"><div class="ferr" id="err_oferta">Campo obrigatório</div></div>
         <div class="fg"><label for="prazoLancamento">Prazo para lançar a 1ª campanha</label><input type="text" id="prazoLancamento" placeholder="Ex: Em 15 dias"></div>
       </div>
-      <div class="frow">
+      <div class="frow3">
         <div class="fg">
-          <label for="metaPacientes">Meta de novos pacientes / 30 dias *</label>
-          <div class="sfx-wrap"><input type="number" id="metaPacientes" placeholder="0" min="0"><span class="sfx">pacientes</span></div>
-          <div class="ferr" id="err_metaPacientes">Campo obrigatório</div>
+          <label for="metaMetaAds">📘 Meta Ads / 30 dias *</label>
+          <div class="sfx-wrap"><input type="number" id="metaMetaAds" placeholder="0" min="0"><span class="sfx">pacientes</span></div>
+          <div class="ferr" id="err_metaMetaAds">Campo obrigatório</div>
+        </div>
+        <div class="fg">
+          <label for="metaGoogleAds">🔍 Google Ads / 30 dias *</label>
+          <div class="sfx-wrap"><input type="number" id="metaGoogleAds" placeholder="0" min="0"><span class="sfx">pacientes</span></div>
+          <div class="ferr" id="err_metaGoogleAds">Campo obrigatório</div>
+        </div>
+        <div class="fg">
+          <label for="metaGMB">📍 Google Meu Negócio / 30 dias *</label>
+          <div class="sfx-wrap"><input type="number" id="metaGMB" placeholder="0" min="0"><span class="sfx">pacientes</span></div>
+          <div class="ferr" id="err_metaGMB">Campo obrigatório</div>
         </div>
       </div>
       <div class="snav"><button class="btn btn-ghost" onclick="goStep(3)">← Voltar</button><button class="btn btn-acc" onclick="next(4)">Próxima etapa →</button></div>
@@ -401,7 +411,7 @@ function validate(step){
     if(!canal){ ce.classList.add('show'); ok=false; } else ce.classList.remove('show');
     const showMeta   = canal==='Meta Ads'||canal==='Ambos';
     const showGoogle = canal==='Google Ads'||canal==='Ambos';
-    const check4 = ['oferta','metaPacientes','cplEstimado'];
+    const check4 = ['oferta','metaMetaAds','metaGoogleAds','metaGMB'];
     if(showMeta)   check4.push('budgetMeta');
     if(showGoogle) check4.push('budgetGoogle');
     check4.forEach(id=>{
@@ -432,6 +442,46 @@ function cl(items){ return `<ul class="cl">${items.map(i=>`<li>${i}</li>`).join(
 function currency(n){ return 'R$ '+n.toLocaleString('pt-BR'); }
 function slug(s){ return s.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''); }
 
+function generateMetaCampaignStructure(esp, proc, meta){
+  const slugEsp = slug(esp);
+  const slugProc = slug(proc);
+  return {
+    campaign: `META_CONV_${slugEsp.toUpperCase().substring(0,8)}_${new Date().toISOString().substring(0,7).replace('-','')}`,
+    campaigns: [
+      {name:`META_CONV_${slugEsp}_Prospecting_${new Date().getFullYear()}`, audience:'Prospecting — interesse em saúde, beleza, bem-estar', creatives: 3},
+      {name:`META_CONV_${slugEsp}_Retargeting_${new Date().getFullYear()}`, audience:'Website visitors — visitantes da landing page', creatives: 2}
+    ],
+    adSets: [
+      {name:'Audiência Personalizada — 30-50 anos', targeting:'Gênero + Idade + Interesses relacionados'},
+      {name:'Lookalike — Similar à base de clientes', targeting:'1% Lookalike dos visitantes'}
+    ],
+    creativeThemes: [
+      '🎯 Resultado/Transformação: Antes e depois, depoimento, case de sucesso',
+      '⏰ Urgência: Promoção por tempo limitado, vagas limitadas',
+      '🤔 Educativo: Desmistificar procedimento, tirar dúvidas, segurança'
+    ]
+  };
+}
+
+function generateGoogleKeywords(esp, proc, bairro, meta){
+  const keywords = [
+    {type:'Exact', keywords:[`[${proc} ${bairro}]`, `[melhor ${esp} ${bairro}]`, `[${proc} próximo de mim]`]},
+    {type:'Phrase', keywords:[`"${proc} em ${bairro}"`, `"${esp} com especialista"`, `"agende sua consulta ${proc}"`]},
+    {type:'Broad', keywords:[`${proc} ${bairro}`, `${esp} consulta`, `agendamento ${proc}`]}
+  ];
+  const negatives = ['gratuito', 'curso online', 'simulador', 'diy', 'caseiro'];
+  return {keywords, negatives, estimate: Math.ceil(meta * 0.15)};
+}
+
+function generateAdGroupStructure(esp, proc, meta){
+  const metaByAudience = Math.ceil(meta / 3);
+  return [
+    {name:`${proc} — Alto interesse`, budget: Math.ceil(meta * 0.4), estimate:`${metaByAudience} pacientes`},
+    {name:`${esp} — Novo paciente`, budget: Math.ceil(meta * 0.35), estimate:`${metaByAudience} pacientes`},
+    {name:`Retargeting — Visitantes`, budget: Math.ceil(meta * 0.25), estimate:`${metaByAudience} pacientes`}
+  ];
+}
+
 function buildPlan(){
   if(!validate(5)) return;
   S.done.add(5); updateXP();
@@ -448,7 +498,10 @@ function buildPlan(){
   const bGoogleM= bGoogle * 30;
   const bTotalM = bTotal * 30;
   const cpl     = 25; // Referência para healthcare: R$ 15-60
-  const meta    = num('metaPacientes');
+  const metaMetaAds = num('metaMetaAds');
+  const metaGoogleAds = num('metaGoogleAds');
+  const metaGMB = num('metaGMB');
+  const meta = metaMetaAds + metaGoogleAds + metaGMB; // Total pacientes
   const leadsM  = cpl > 0 ? Math.round(bTotalM / cpl) : 0;
   const convNec = leadsM > 0 ? ((meta / leadsM) * 100).toFixed(1) : '—';
   const cpa     = meta > 0 ? (bTotalM / meta).toFixed(0) : '—';
@@ -469,11 +522,15 @@ function buildPlan(){
     barS:    v('barreiraSolucao')||'Não informado',
     canal, oferta: v('oferta'),
     prazo:   v('prazoLancamento')||'A definir',
-    meta, cpl, leadsM, convNec, cpa,
+    meta, metaMetaAds, metaGoogleAds, metaGMB, cpl, leadsM, convNec, cpa,
     bMeta, bGoogle, bTotal, bMetaM, bGoogleM, bTotalM,
     passo:   v('proximoPasso'),
     date:    new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})
   };
+
+  d.metaCampaign = generateMetaCampaignStructure(d.esp, d.proc, d.metaMetaAds);
+  d.googleKeywords = generateGoogleKeywords(d.esp, d.proc, d.bairro, d.metaGoogleAds);
+  d.adGroupStructure = generateAdGroupStructure(d.esp, d.proc, d.metaMetaAds);
 
   planData = d;
   document.getElementById('barName').textContent = d.nome;
@@ -556,9 +613,51 @@ function buildPlan(){
         <div class="pg3">${fld('Oferta Principal',d.oferta)}${fld('CPL Estimado',currency(d.cpl))}${fld('Prazo para 1ª Campanha',d.prazo)}</div>
       </div></div>
 
+      <div class="plan-sec"><div class="plan-inner">
+        ${secTitle('05','Estrutura de Campanhas por Plataforma')}
+        <div style="margin-bottom:20px;">
+          <div class="pf"><div class="pf-lbl">📊 Resumo da Estrutura Recomendada</div></div>
+          ${cl([
+            `<strong>Total de Pacientes:</strong> ${d.meta} (Meta Ads: ${d.metaMetaAds} | Google Ads: ${d.metaGoogleAds} | GMB: ${d.metaGMB})`,
+            `<strong>Campanhas simultâneas:</strong> ${showMeta && showGoogle ? '2 plataformas + GMB' : (showMeta ? 'Meta Ads + GMB' : 'Google Ads + GMB')}`,
+            `<strong>Budget total/mês:</strong> ${currency(d.bTotalM)} distribuído entre plataformas`,
+            `<strong>Timeline recomendado:</strong> Fase 1 (Setup: 3-5 dias) → Fase 2 (Testes: 7-14 dias) → Fase 3 (Otimização: Contínua)`
+          ])}
+        </div>
+      </div></div>
+
       ${showMeta ? `
       <div class="plan-sec"><div class="plan-inner">
-        <div class="pplatform meta">📘 &nbsp;Meta Ads — Plano de Ação</div>
+        <div class="pplatform meta">📘 &nbsp;Estrutura Meta Ads</div>
+        <div class="pf"><div class="pf-lbl">Nome da Campanha Recomendada</div><div class="pf-val">${d.metaCampaign.campaign}</div></div>
+        <div class="pf"><div class="pf-lbl">Estrutura de Campanha</div></div>
+        ${cl(d.metaCampaign.campaigns.map(c=>`<strong>${c.name}</strong><br/>Público: ${c.audience}<br/>Criativos: ${c.creatives}`))}
+        <div class="pf" style="margin-top:12px;"><div class="pf-lbl">Segmentações Recomendadas</div></div>
+        ${cl(d.metaCampaign.adSets.map(a=>`<strong>${a.name}</strong><br/>${a.targeting}`))}
+        <div class="pf" style="margin-top:12px;"><div class="pf-lbl">Temas de Criativos</div></div>
+        ${cl(d.metaCampaign.creativeThemes)}
+      </div></div>` : ''}
+
+      ${showGoogle ? `
+      <div class="plan-sec"><div class="plan-inner">
+        <div class="pplatform google">🔍 &nbsp;Estrutura Google Ads</div>
+        <div class="pf"><div class="pf-lbl">Grupos de Anúncios Recomendados</div></div>
+        ${cl(d.adGroupStructure.map(ag=>`<strong>${ag.name}</strong><br/>Orçamento indicado: ~${Math.ceil(ag.budget)}% do total | Meta: ${ag.estimate}`))}
+        <div class="pf" style="margin-top:12px;"><div class="pf-lbl">Keywords de Alta Prioridade</div></div>
+        ${d.googleKeywords.keywords.map(kw=>`
+        <div class="pf">
+          <div class="pf-lbl">${kw.type} Match</div>
+          <div class="pf-val">${kw.keywords.join(' | ')}</div>
+        </div>`).join('')}
+        <div class="pf" style="margin-top:12px;"><div class="pf-lbl">Keywords Negativos (Use em Todas as Campanhas)</div></div>
+        <div class="pf-val">${d.googleKeywords.negatives.join(', ')}</div>
+        <div class="pf" style="margin-top:12px;"><div class="pf-lbl">Projeção de Tráfego</div><div class="pf-val">~${d.googleKeywords.estimate} pacientes/mês com esse mix de keywords</div></div>
+      </div></div>` : ''}
+
+      ${showMeta ? `
+      <div class="plan-sec"><div class="plan-inner">
+        ${secTitle('06','Meta Ads — Plano de Ação')}
+        <div class="pplatform meta">📘 &nbsp;Implementação</div>
         <div class="pg2">
           <div>
             ${fld('Budget',`${currency(d.bMeta)}/dia · ${currency(d.bMetaM)}/mês`)}
@@ -585,7 +684,8 @@ function buildPlan(){
 
       ${showGoogle ? `
       <div class="plan-sec"><div class="plan-inner">
-        <div class="pplatform google">🔍 &nbsp;Google Ads — Plano de Ação</div>
+        ${secTitle('07','Google Ads — Plano de Ação')}
+        <div class="pplatform google">🔍 &nbsp;Implementação</div>
         <div class="pg2">
           <div>
             ${fld('Budget',`${currency(d.bGoogle)}/dia · ${currency(d.bGoogleM)}/mês`)}
@@ -611,7 +711,8 @@ function buildPlan(){
       </div></div>` : ''}
 
       <div class="plan-sec"><div class="plan-inner">
-        <div class="pplatform gmb">📍 &nbsp;Google Meu Negócio — Plano de Ação</div>
+        ${secTitle('08','Google Meu Negócio — Plano de Ação')}
+        <div class="pplatform gmb">📍 &nbsp;Otimização e Ativação</div>
         <div class="pg2">
           <div>
             ${fld('Status Atual', d.gmb==='Não tenho'?'Perfil ainda não criado — criação é o primeiro passo':`Perfil existente: ${d.gmb} — otimização e posts regulares`)}
