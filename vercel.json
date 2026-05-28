@@ -2,7 +2,6 @@
   "buildCommand": "echo 'No build required - static site'",
   "devCommand": "python3 -m http.server 3030",
   "installCommand": "echo 'No dependencies'",
-  "env": {},
   "regions": ["iad1"],
   "public": true,
   "trailingSlash": false,
@@ -23,12 +22,6 @@
           "value": "SAMEORIGIN"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/:path*",
-      "destination": "/:path*.html"
     }
   ]
 }
