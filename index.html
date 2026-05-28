@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP Médicos | Tráfego Pago para Profissionais de Saúde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f0e9dc; color: #261a0c; min-height: 100vh; }
+
+/* Header */
+header { background: #261a0c; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(38,26,12,.15); }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark { width: 32px; height: 32px; background: #7d5f38; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 16px; }
+.logo-text { color: #fff; font-size: 14px; font-weight: 600; letter-spacing: .5px; }
+.nav { display: flex; gap: 24px; }
+.nav a { color: rgba(255,255,255,.7); font-size: 13px; text-decoration: none; transition: color .2s; }
+.nav a:hover { color: #fff; }
+
+/* Hero */
+.hero { max-width: 1000px; margin: 0 auto; padding: 80px 48px; text-align: center; }
+.hero h1 { font-size: clamp(32px, 6vw, 56px); font-weight: 700; color: #261a0c; margin-bottom: 20px; line-height: 1.2; }
+.hero p { font-size: clamp(14px, 2vw, 18px); color: #7a6a52; margin-bottom: 40px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* CTA Buttons */
+.cta-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 500px; margin: 0 auto; }
+.btn { padding: 16px 32px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; font-family: inherit; }
+.btn-primary { background: #7d5f38; color: #fff; }
+.btn-primary:hover { background: #52391a; transform: translateY(-2px); }
+.btn-secondary { background: #fff; color: #261a0c; border: 1.5px solid #d4c4a4; }
+.btn-secondary:hover { background: #faf7f2; border-color: #7d5f38; }
+
+/* Features */
+.features { max-width: 1000px; margin: 80px auto 0; padding: 80px 48px; background: #fff; border-top: 1px solid #e8deca; }
+.features h2 { font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 50px; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; }
+.feature { padding: 24px; }
+.feature-num { font-size: 32px; font-weight: 800; color: #7d5f38; margin-bottom: 10px; }
+.feature h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.feature p { font-size: 13px; color: #7a6a52; line-height: 1.6; }
+
+/* Footer */
+footer { background: #261a0c; color: rgba(255,255,255,.5); padding: 40px 48px; text-align: center; font-size: 12px; margin-top: 80px; }
+
+@media (max-width: 640px) {
+  .nav { display: none; }
+  .hero { padding: 40px 24px; }
+  .cta-section { grid-template-columns: 1fr; }
+  .features { padding: 40px 24px; }
+  .feature-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">VR</div>
+    <span class="logo-text">TP Médicos</span>
+  </div>
+  <nav class="nav">
+    <a href="#apresentacao">Apresentação</a>
+    <a href="mailto:jefferson@verticerio.com.br">Contato</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Tráfego Pago para<br>Profissionais de Saúde</h1>
+  <p>Monte seu plano de ação em 5 minutos. Estratégias prontas para Meta Ads, Google Ads e Google Meu Negócio.</p>
+
+  <div class="cta-section">
+    <a href="apresentacao/" class="btn btn-secondary">📊 Apresentação</a>
+    <a href="plano/" class="btn btn-primary">📋 Monte seu Plano</a>
+  </div>
+</div>
+
+<div class="features">
+  <h2>Como funciona</h2>
+  <div class="feature-grid">
+    <div class="feature">
+      <div class="feature-num">1</div>
+      <h3>Preencha seus dados</h3>
+      <p>Especialidade, público, barreiras e budget. Levamos você pela mão.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">2</div>
+      <h3>Receba o plano</h3>
+      <p>Estratégia personalizada com checkpoints, orçamentos e prazos.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">3</div>
+      <h3>Imprima ou compartilhe</h3>
+      <p>PDF para o cliente ou WhatsApp direto. Você escolhe.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 TP Médicos • Estratégia Digital por <strong>Vértice Rio</strong></p>
+</footer>
+
+</body>
+</html>

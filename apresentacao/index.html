@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tráfego Pago para Profissionais de Saúde — Vértice Rio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:     #EDE5D4;
+  --bg2:    #E4D9C4;
+  --white:  #FDFAF5;
+  --brown:  #2C1F0E;
+  --brown2: #5C4A2A;
+  --brown3: #9A8060;
+  --teal:   #4BA888;
+  --teal2:  #2E7A62;
+  --sand:   #C9B48A;
+  --sand2:  #DDD0B8;
+}
+html, body {
+  background: var(--bg);
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--brown);
+}
+
+#vr-deck {
+  width: 92vw;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+#vr-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+#vr-header svg { width: 30px; height: 30px; flex-shrink: 0; }
+#vr-header span { font-size: 14px; font-weight: 500; color: var(--brown2); letter-spacing: .02em; }
+
+#vr-frame {
+  background: var(--bg);
+  border: 1px solid var(--sand2);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.vr-slide {
+  display: none;
+  min-height: 78vh;
+  padding: 6vh 7vw 7vh;
+  animation: vr-in .28s ease;
+  flex-direction: column;
+  justify-content: center;
+}
+.vr-slide.on { display: flex; }
+.vr-slide.section { background: var(--bg2); }
+
+@keyframes vr-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tag {
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--teal2);
+  margin-bottom: 16px;
+}
+
+.h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(38px, 5vw, 68px);
+  line-height: 1.06;
+  color: var(--brown);
+  margin-bottom: 22px;
+}
+.h1 em { font-style: italic; color: var(--teal2); }
+
+.h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(26px, 3.2vw, 46px);
+  line-height: 1.12;
+  color: var(--brown);
+  margin-bottom: 22px;
+  font-weight: 400;
+}
+
+.body {
+  font-size: clamp(14px, 1.3vw, 18px);
+  line-height: 1.7;
+  color: var(--brown2);
+}
+
+.rule { width: 36px; height: 2px; background: var(--teal); margin-bottom: 24px; }
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5vw;
+  align-items: center;
+}
+
+.col-div {
+  border-left: 1px solid var(--sand2);
+  padding-left: 4vw;
+}
+
+.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--sand2);
+  border-radius: 10px;
+  padding: clamp(16px, 2vw, 26px);
+}
+.card.accent { border-color: var(--teal); background: #EEF8F3; }
+
+.card-label {
+  font-size: clamp(10px, .9vw, 12px);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--brown3);
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(18px, 1.8vw, 26px);
+  color: var(--brown);
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+
+.card-body { font-size: clamp(13px, 1.1vw, 16px); color: var(--brown2); line-height: 1.55; }
+
+.dot-list { display: flex; flex-direction: column; gap: 18px; }
+.dot-item { display: flex; gap: 14px; align-items: flex-start; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 7px; }
+.dot-title { font-size: clamp(14px, 1.25vw, 18px); font-weight: 500; color: var(--brown); margin-bottom: 4px; }
+.dot-sub   { font-size: clamp(12px, 1.05vw, 15px); color: var(--brown2); line-height: 1.55; }
+
+.quote { border-left: 3px solid var(--teal); padding: 16px 22px; background: var(--bg2); border-radius: 0 8px 8px 0; margin-top: 22px; }
+.quote p { font-family: 'DM Serif Display', serif; font-size: clamp(15px, 1.4vw, 21px); font-style: italic; color: var(--brown); line-height: 1.55; }
+
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 8px; }
+.stat { background: var(--white); border: 1px solid var(--sand2); border-radius: 10px; padding: clamp(16px, 2vw, 28px); }
+.stat-n { font-family: 'DM Serif Display', serif; font-size: clamp(38px, 4.5vw, 62px); color: var(--teal2); line-height: 1; margin-bottom: 10px; }
+.stat-l { font-size: clamp(12px, 1.05vw, 15px); color: var(--brown2); line-height: 1.5; }
+
+.section-inner { border-left: 4px solid var(--teal); padding-left: 40px; }
+.section-n {
+  font-size: clamp(10px, 1vw, 13px);
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--teal2);
+  margin-bottom: 16px;
+}
+.section-h {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: 1.04;
+  color: var(--brown);
+  margin-bottom: 18px;
+}
+.section-s {
+  font-size: clamp(16px, 1.5vw, 22px);
+  color: var(--brown2);
+  line-height: 1.6;
+}
+
+.cmp   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cmp-col { background: var(--white); border: 1px solid var(--sand2); border-radius: 10px; overflow: hidden; }
+.cmp-head { padding: 12px 18px; font-size: clamp(10px, .9vw, 12px); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; border-bottom: 1px solid var(--sand2); }
+.cmp-head.a { color: var(--teal2); background: #EEF8F3; }
+.cmp-head.b { color: var(--brown3); background: var(--bg2); }
+.cmp-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+.cmp-item { font-size: clamp(12px, 1.05vw, 15px); color: var(--brown2); line-height: 1.45; display: flex; gap: 9px; align-items: flex-start; }
+.cmp-item::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.cmp-col.a .cmp-item::before { background: var(--teal); }
+.cmp-col.b .cmp-item::before { background: var(--sand); }
+
+.err-list { display: flex; flex-direction: column; gap: 11px; }
+.err-item { display: flex; gap: 14px; align-items: flex-start; background: var(--white); border: 1px solid var(--sand2); border-radius: 8px; padding: 14px 18px; }
+.err-n { font-size: clamp(11px, 1vw, 14px); font-weight: 700; color: var(--brown3); min-width: 24px; padding-top: 1px; }
+.err-t { font-size: clamp(14px, 1.2vw, 17px); font-weight: 500; color: var(--brown); margin-bottom: 3px; }
+.err-s { font-size: clamp(12px, 1.05vw, 15px); color: var(--brown2); }
+
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { text-align: left; font-size: clamp(10px, .9vw, 12px); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--brown3); padding: 10px 16px; border-bottom: 1px solid var(--sand2); }
+.tbl td { padding: 13px 16px; border-bottom: 1px solid var(--bg2); color: var(--brown2); font-size: clamp(13px, 1.15vw, 17px); }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl td:first-child { font-weight: 500; color: var(--brown); }
+.tg { color: var(--teal2); font-weight: 500; }
+
+.flow { display: flex; margin-bottom: 24px; }
+.flow-step { flex: 1; background: var(--white); border: 1px solid var(--sand2); padding: clamp(12px, 1.5vw, 20px); border-right: none; }
+.flow-step:first-child { border-radius: 8px 0 0 8px; }
+.flow-step:last-child { border-radius: 0 8px 8px 0; border-right: 1px solid var(--teal); border-color: var(--teal); background: #EEF8F3; }
+.flow-n { font-size: clamp(9px, .85vw, 11px); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--teal2); margin-bottom: 6px; }
+.flow-t { font-size: clamp(11px, 1vw, 14px); color: var(--brown2); line-height: 1.45; }
+
+.chk { display: flex; flex-direction: column; gap: 14px; }
+.chk-item { display: flex; gap: 14px; align-items: flex-start; }
+.chk-n { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--teal); display: flex; align-items: center; justify-content: center; font-size: clamp(11px, 1vw, 13px); font-weight: 600; color: var(--teal2); flex-shrink: 0; }
+.chk-t { font-size: clamp(14px, 1.2vw, 17px); font-weight: 500; color: var(--brown); margin-bottom: 3px; }
+.chk-s { font-size: clamp(12px, 1.05vw, 15px); color: var(--brown2); line-height: 1.5; }
+
+#vr-bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; background: var(--white); border-top: 1px solid var(--sand2); }
+#vr-bar-left { display: flex; align-items: center; gap: 10px; }
+#vr-bar-left span { font-size: 14px; font-weight: 500; color: var(--brown2); }
+#vr-dots { display: flex; gap: 5px; align-items: center; }
+.vr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sand2); cursor: pointer; transition: background .2s, transform .2s; }
+.vr-dot.on { background: var(--teal); transform: scale(1.5); }
+#vr-controls { display: flex; align-items: center; gap: 10px; }
+.vr-btn { width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--sand2); background: transparent; cursor: pointer; font-size: 17px; color: var(--brown2); display: flex; align-items: center; justify-content: center; transition: background .15s; }
+.vr-btn:hover { background: var(--bg2); }
+.vr-btn:disabled { opacity: .3; cursor: default; }
+#vr-counter { font-size: 13px; color: var(--brown3); padding: 0 6px; min-width: 52px; text-align: center; }
+
+@media (max-width: 768px) {
+  #vr-deck { width: 96vw; padding: 16px 0 32px; }
+  .vr-slide { padding: 36px 24px 44px; min-height: 70vh; }
+  .vr-slide.section { padding: 48px 28px; }
+  .two { grid-template-columns: 1fr; gap: 28px; }
+  .col-div { border-left: none; padding-left: 0; border-top: 1px solid var(--sand2); padding-top: 24px; }
+  .three { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .cmp { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; gap: 6px; }
+  .flow-step { border: 1px solid var(--sand2) !important; border-radius: 8px !important; }
+  .flow-step:last-child { border-color: var(--teal) !important; }
+  #vr-dots { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="vr-deck">
+  <div id="vr-header">
+    <span>✓ Vértice Rio</span>
+  </div>
+
+  <div id="vr-frame">
+    <!-- Slide 1: CAPA -->
+    <div class="vr-slide on" id="s0">
+      <div class="two">
+        <div>
+          <div class="tag">Workshop · Vértice Rio · 28.05.2026</div>
+          <div class="h1">Tráfego Pago<br>para <em>Profissionais<br>de Saúde.</em></div>
+          <div class="rule"></div>
+          <div class="body">Como atrair mais pacientes com Meta Ads e Google Ads – estratégias práticas e plano de ação concreto.</div>
+          <div style="font-size:clamp(11px,1vw,14px);letter-spacing:.06em;color:var(--brown3);text-transform:uppercase;margin-top:16px;line-height:2">Jefferson Falcão · Vértice Rio<br>Botafogo, Rio de Janeiro</div>
+        </div>
+        <div class="col-div">
+          <div style="font-size:clamp(10px,.9vw,12px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brown3);margin-bottom:10px">O que você vai aprender hoje</div>
+          <div class="dot-list" style="margin-top:12px">
+            <div class="dot-item"><div class="dot"></div><div><div class="dot-sub">Por que a maioria dos médicos perde dinheiro anunciando online</div></div></div>
+            <div class="dot-item"><div class="dot"></div><div><div class="dot-sub">Como o Meta Ads capta leads de pacientes no Instagram</div></div></div>
+            <div class="dot-item"><div class="dot"></div><div><div class="dot-sub">Como o Google captura quem já quer marcar consulta</div></div></div>
+            <div class="dot-item"><div class="dot"></div><div><div class="dot-sub">Como montar seu plano de ação – hoje, aqui</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: ABERTURA -->
+    <div class="vr-slide" id="s1">
+      <div class="tag">Abertura interativa</div>
+      <div class="h2">Antes de começar –<br>levante a mão.</div>
+      <div class="dot-list">
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">Quem aqui já tentou anunciar online pelo menos uma vez?</div></div></div>
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">Quem hoje não tem nenhuma campanha ativa rodando?</div></div></div>
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">Quem quer sair daqui com um plano de ação concreto?</div></div></div>
+      </div>
+      <div class="quote"><p>"As respostas que você acabou de dar já mostram onde estamos – e para onde vamos."</p></div>
+    </div>
+
+    <!-- Slide 3: SEPARADOR BLOCO 1 -->
+    <div class="vr-slide section" id="s2">
+      <div class="section-inner">
+        <div class="section-n">Bloco 1 · Diagnóstico</div>
+        <div class="section-h">Os 3 perfis<br>do médico<br>no digital.</div>
+        <div class="section-s">Em qual desses você está hoje?</div>
+      </div>
+    </div>
+
+    <!-- Slide 4: 3 PERFIS -->
+    <div class="vr-slide" id="s3">
+      <div class="tag">Diagnóstico</div>
+      <div class="h2">Os 3 perfis do médico no digital</div>
+      <div class="three">
+        <div class="card"><div class="card-label">Perfil 1</div><div class="card-title">Invisível</div><div class="card-body">Não anuncia, não aparece. Depende 100% de indicação. Crescimento lento e imprevisível.</div></div>
+        <div class="card"><div class="card-label">Perfil 2</div><div class="card-title">Presente sem resultado</div><div class="card-body">Já tentou anunciar, mas jogou dinheiro fora. Sem estratégia, sem estrutura, sem retorno.</div></div>
+        <div class="card accent"><div class="card-label" style="color:var(--teal2)">Perfil 3</div><div class="card-title">Crescendo</div><div class="card-body">Tem campanha estruturada rodando. Recebe leads qualificados todo mês. Escala previsível.</div></div>
+      </div>
+      <div class="quote"><p>"A diferença entre o perfil 2 e o perfil 3 não é o orçamento. É a estrutura."</p></div>
+    </div>
+
+    <!-- Slide 5: POR QUE ERRA -->
+    <div class="vr-slide" id="s4">
+      <div class="tag">Diagnóstico</div>
+      <div class="h2">Por que a maioria anuncia errado</div>
+      <div class="dot-list">
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">"Impulsionar post já basta"</div><div class="dot-sub">Impulsionar não é campanha. É visibilidade sem estratégia – e sem retorno mensurável.</div></div></div>
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">"Preciso de muitos seguidores primeiro"</div><div class="dot-sub">Seguidores não pagam consulta. Leads qualificados, sim.</div></div></div>
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">"Tráfego pago é só para os grandes"</div><div class="dot-sub">Com R$ 30/dia já é possível gerar leads. Tamanho do budget importa menos que estrutura.</div></div></div>
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">"Já tentei e não funcionou"</div><div class="dot-sub">Sem estrutura certa, não funciona mesmo. A estrutura muda tudo.</div></div></div>
+      </div>
+    </div>
+
+    <!-- Slide 6: ESTATÍSTICAS -->
+    <div class="vr-slide" id="s5">
+      <div class="tag">Diagnóstico · Contexto</div>
+      <div class="h2">O paciente mudou. A busca por médicos também.</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-n">77%</div><div class="stat-l">dos pacientes pesquisam o médico online antes de ligar para marcar</div></div>
+        <div class="stat"><div class="stat-n">3×</div><div class="stat-l">mais buscas por especialistas no Google nos últimos 3 anos</div></div>
+        <div class="stat"><div class="stat-n">68%</div><div class="stat-l">das decisões de consulta passam pelo Instagram ou Google</div></div>
+      </div>
+      <div class="quote"><p>"Quem não aparece online simplesmente não existe para esse paciente."</p></div>
+    </div>
+
+    <!-- Slide 7: RESOLUÇÃO -->
+    <div class="vr-slide" id="s6">
+      <div class="tag">Diagnóstico</div>
+      <div class="h2">O que tráfego pago resolve – e o que não</div>
+      <div class="cmp">
+        <div class="cmp-col a"><div class="cmp-head a">Resolve</div><div class="cmp-body"><div class="cmp-item">Gerar leads de pacientes qualificados</div><div class="cmp-item">Aumentar agenda de forma previsível</div><div class="cmp-item">Promover procedimentos específicos</div><div class="cmp-item">Testar novas especialidades e públicos</div></div></div>
+        <div class="cmp-col b"><div class="cmp-head b">Não resolve</div><div class="cmp-body"><div class="cmp-item">Substituir um atendimento ruim</div><div class="cmp-item">Funcionar sem uma oferta clara</div><div class="cmp-item">Trazer resultado sem budget mínimo</div><div class="cmp-item">Operar sem acompanhamento constante</div></div></div>
+      </div>
+    </div>
+
+    <!-- Slide 8: SEPARADOR META ADS -->
+    <div class="vr-slide section" id="s7">
+      <div class="section-inner">
+        <div class="section-n">Bloco 2 · Meta Ads</div>
+        <div class="section-h">Captação de<br>pacientes no<br>Instagram.</div>
+        <div class="section-s">Como usar Meta Ads para gerar leads qualificados de forma previsível.</div>
+      </div>
+    </div>
+
+    <!-- Slide 9: ESTRUTURA META -->
+    <div class="vr-slide" id="s8">
+      <div class="tag">Meta Ads · Estrutura</div>
+      <div class="h2">Campanha em 5 etapas</div>
+      <div class="flow">
+        <div class="flow-step"><div class="flow-n">1 · Público</div><div class="flow-t">Mulheres 30–55, RJ, interesse em saúde estética</div></div>
+        <div class="flow-step"><div class="flow-n">2 · Criativo</div><div class="flow-t">Foto ou vídeo do médico + copy com dor e solução</div></div>
+        <div class="flow-step"><div class="flow-n">3 · Oferta</div><div class="flow-t">"Avaliação gratuita" ou "Consulta com desconto"</div></div>
+        <div class="flow-step"><div class="flow-n">4 · Lead Ad</div><div class="flow-t">Coleta nome + WhatsApp dentro do Instagram</div></div>
+        <div class="flow-step"><div class="flow-n">5 · Follow-up</div><div class="flow-t">Contato em até 1 hora – a janela de ouro</div></div>
+      </div>
+      <div class="dot-list">
+        <div class="dot-item"><div class="dot"></div><div><div class="dot-title">Lead Ad – o formulário que capta dentro do Instagram</div><div class="dot-sub">O paciente não sai do app. Conversão muito maior do que direcionar para site externo. Dados chegam em tempo real e integram com WhatsApp.</div></div></div>
+      </div>
+    </div>
+
+    <!-- Slide 10: COPY -->
+    <div class="vr-slide" id="s9">
+      <div class="tag">Meta Ads · Criativo</div>
+      <div class="h2">Copy fraco vs. copy que converte</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:22px">
+        <div style="border-left:3px solid var(--brown3);padding:14px 20px;background:var(--bg2);border-radius:0 8px 8px 0"><div style="font-size:clamp(10px,.9vw,12px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brown3);margin-bottom:7px">Fraco</div><div style="font-size:clamp(13px,1.15vw,17px);color:var(--brown2);line-height:1.6;font-style:italic">"Somos uma clínica especializada em dermatologia. Agende sua consulta pelo nosso site."</div></div>
+        <div style="border-left:3px solid var(--teal);padding:14px 20px;background:#EEF8F3;border-radius:0 8px 8px 0"><div style="font-size:clamp(10px,.9vw,12px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal2);margin-bottom:7px">Converte</div><div style="font-size:clamp(13px,1.15vw,17px);color:var(--brown2);line-height:1.6

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monte seu Plano de Ação — Vértice Rio</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0e9dc; --surf:#fff; --surf2:#faf7f2;
+  --bd:#d4c4a4; --bd2:#e8deca;
+  --ink:#261a0c; --muted:#7a6a52;
+  --acc:#7d5f38; --acc-dk:#52391a; --acc-lt:#c9a46a;
+  --ok:#3d6b4a; --err:#a83030; --r:10px;
+  --sh:0 2px 12px rgba(38,26,12,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+.header{background:var(--ink);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:36px;height:36px;background:var(--acc);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.logo-name{color:#fff;font-size:15px;font-weight:600;letter-spacing:.3px;}
+.xp-wrap{display:flex;align-items:center;gap:10px;}
+.xp-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--acc-lt);}
+.xp-bg{width:140px;height:6px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden;}
+.xp-fill{height:100%;width:0%;background:var(--acc);border-radius:3px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.xp-pct{font-size:12px;font-weight:700;color:#fff;min-width:32px;}
+.level-lbl{font-size:10px;font-weight:700;color:var(--acc-lt);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;}
+.app-wrap{max-width:760px;margin:0 auto;padding:44px 24px 100px;}
+.page-ttl{text-align:center;margin-bottom:36px;}
+.page-ttl h1{font-size:26px;font-weight:700;margin-bottom:6px;}
+.page-ttl p{color:var(--muted);font-size:14px;}
+.steps-nav{display:flex;gap:4px;background:var(--surf);border:1px solid var(--bd);border-radius:14px;padding:7px;margin-bottom:36px;box-shadow:var(--sh);}
+.s-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border:none;background:transparent;border-radius:9px;cursor:pointer;transition:all .22s;position:relative;}
+.s-btn .si{font-size:20px;line-height:1;}
+.s-btn .sl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);white-space:nowrap;}
+.s-btn.active{background:var(--acc);}
+.s-btn.active .sl{color:rgba(255,255,255,.85);}
+.s-btn.done{background:var(--ok);}
+.s-btn.done .sl{color:rgba(255,255,255,.85);}
+.s-btn.done::after{content:'✓';position:absolute;top:5px;right:8px;font-size:10px;color:rgba(255,255,255,.8);font-weight:700;}
+.s-btn.locked{opacity:.38;cursor:not-allowed;}
+.sp{display:none;}
+.sp.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.card{background:var(--surf);border:1px solid var(--bd);border-radius:16px;padding:36px 40px;box-shadow:var(--sh);}
+.s-chip{display:inline-flex;align-items:center;background:var(--acc);color:#fff;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;}
+.card h2{font-size:22px;font-weight:700;margin-bottom:6px;}
+.card .step-desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:28px;}
+.fg{margin-bottom:22px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+label,.flabel{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px;}
+input[type="text"],input[type="number"],textarea{width:100%;padding:13px 15px;border:1.5px solid var(--bd2);border-radius:var(--r);background:var(--surf);color:var(--ink);font-size:14px;font-family:inherit;transition:border-color .18s,box-shadow .18s;outline:none;-webkit-appearance:none;}
+input:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(125,95,56,.1);}
+textarea{min-height:96px;resize:vertical;line-height:1.6;}
+input.has-err,textarea.has-err{border-color:var(--err);}
+.ferr{color:var(--err);font-size:11px;margin-top:5px;display:none;}
+.ferr.show{display:block;}
+.fhint{color:var(--muted);font-size:11px;margin-top:5px;font-style:italic;}
+.pfx-wrap{display:flex;}
+.pfx{background:var(--surf2);border:1.5px solid var(--bd2);border-right:none;border-radius:var(--r) 0 0 var(--r);padding:13px 12px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;}
+.pfx+input{border-radius:0 var(--r) var(--r) 0;}
+.sfx-wrap{position:relative;}
+.sfx-wrap input{padding-right:110px;}
+.sfx{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted);pointer-events:none;}
+.toggle-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.nao-btn{display:flex;align-items:center;gap:5px;background:transparent;border:1px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;font-family:inherit;}
+.nao-btn.on{background:var(--ink);border-color:var(--ink);color:#f0e9dc;}
+.nao-btn .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6;}
+.nao-btn.on .dot{opacity:1;background:var(--acc-lt);}
+input.nao-off{opacity:.35;pointer-events:none;background:var(--surf2);}
+.rcs{display:flex;gap:8px;flex-wrap:wrap;}
+.rc{position:relative;}
+.rc input{position:absolute;opacity:0;width:0;height:0;}
+.rc label{display:flex;align-items:center;gap:8px;padding:11px 18px;border:1.5px solid var(--bd2);border-radius:var(--r);background:var(--surf);cursor:pointer;font-size:13px;font-weight:500;color:var(--ink);text-transform:none;letter-spacing:0;transition:all .18s;margin-bottom:0;}
+.rc label::before{content:'';width:14px;height:14px;border:2px solid var(--bd);border-radius:50%;flex-shrink:0;transition:all .18s;}
+.rc input:checked+label{border-color:var(--acc);background:rgba(125,95,56,.07);color:var(--acc-dk);}
+.rc input:checked+label::before{border-color:var(--acc);background:var(--acc);box-shadow:inset 0 0 0 3px #fff;}
+.divider{border:none;border-top:1px solid var(--bd2);margin:28px 0;}
+.snav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--bd2);}
+.btn{padding:13px 28px;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .18s;font-family:inherit;}
+.btn-acc{background:var(--acc);color:#fff;}
+.btn-acc:hover{background:var(--acc-dk);transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--bd);}
+.btn-ghost:hover{background:var(--surf2);}
+.btn-ink{background:var(--ink);color:#fff;padding:15px 32px;font-size:15px;font-weight:700;}
+.btn-ink:hover{background:var(--acc-dk);transform:translateY(-1px);}
+.btn-ink:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.commit-box{background:var(--ink);border-radius:14px;padding:28px 32px;}
+.commit-box .flabel{color:var(--acc-lt);margin-bottom:10px;}
+.commit-box textarea{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff;}
+.commit-box textarea::placeholder{color:rgba(255,255,255,.35);}
+.commit-box textarea:focus{border-color:var(--acc-lt);box-shadow:0 0 0 3px rgba(201,164,106,.15);}
+.dl-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(201,164,106,.15);border:1px solid rgba(201,164,106,.3);color:var(--acc-lt);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px;}
+#resultsView{display:none;}
+.plan-inner{max-width:900px;margin:0 auto;padding:0 48px;}
+.plan-bar{position:sticky;top:0;z-index:200;background:var(--ink);padding:0;}
+.plan-bar-inner{max-width:900px;margin:0 auto;padding:12px 48px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.plan-bar-brand{display:flex;align-items:center;gap:8px;}
+.plan-bar-client{color:rgba(255,255,255,.4);font-size:11px;}
+.plan-bar-name{color:#fff;font-size:14px;font-weight:600;}
+.plan-bar-actions{display:flex;gap:8px;}
+.btn-print{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;}
+.btn-print:hover{background:rgba(255,255,255,.2);}
+.btn-wa{display:flex;align-items:center;gap:6px;background:#25d366;border:none;color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;}
+.btn-wa:hover{background:#1dae54;}
+.btn-wa:disabled{opacity:.6;cursor:not-allowed;}
+.plan-hero{background:#1a1107;padding:52px 0 44px;}
+.plan-hero-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--acc-lt);margin-bottom:14px;}
+.plan-hero-flex{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;}
+.plan-hero-title{font-size:38px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;}
+.plan-hero-sub{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:20px;}
+.plan-hero-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.plan-hero-pill{border:1px solid rgba(201,164,106,.35);color:var(--acc-lt);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.plan-hero-meta{text-align:right;white-space:nowrap;}
+.plan-hero-date{color:rgba(255,255,255,.3);font-size:12px;margin-bottom:4px;}
+.plan-hero-agency{color:rgba(255,255,255,.2);font-size:11px;}
+.plan-body{background:var(--surf2);}
+.plan-sec{padding:36px 0;border-bottom:1px solid var(--bd2);}
+.plan-sec:last-child{border-bottom:none;}
+.plan-sec-title{display:flex;align-items:center;gap:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--acc);margin-bottom:22px;padding-bottom:10px;border-bottom:1px solid var(--bd);}
+.plan-sec-num{background:var(--acc);color:#fff;border-radius:5px;padding:2px 8px;font-size:9px;font-weight:800;letter-spacing:1px;}
+.pf{margin-bottom:12px;}
+.pf-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9a8a72;margin-bottom:5px;}
+.pf-val{font-size:13px;color:var(--ink);line-height:1.6;padding:10px 14px;background:#fff;border-radius:8px;border-left:3px solid var(--acc);min-height:36px;box-shadow:0 1px 4px rgba(38,26,12,.05);}
+.pf-val.na{color:#b0a090;font-style:italic;border-left-color:var(--bd);}
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.pg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.kpi-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.kpi{flex:1;min-width:100px;background:#fff;border-radius:10px;padding:14px 16px;text-align:center;border-top:3px solid var(--acc);box-shadow:var(--sh);}
+.kpi-v{font-size:20px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:5px;}
+.kpi-l{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+.kpi.meta{border-top-color:#1565c0;}
+.kpi.google{border-top-color:#bf360c;}
+.kpi.total{border-top-color:#261a0c;}
+.proj-row{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:20px;box-shadow:var(--sh);}
+.proj-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--acc);margin-bottom:14px;}
+.proj-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.proj-item{text-align:center;}
+.proj-v{font-size:18px;font-weight:800;color:var(--ink);}
+.proj-v.highlight{color:var(--acc);}
+.proj-l{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-top:4px;}
+.proj-sep{width:1px;background:var(--bd2);}
+.pplatform{display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:9px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px;}
+.pplatform.meta{background:#e8f0ff;color:#1565c0;}
+.pplatform.google{background:#fff3e0;color:#bf360c;}
+.pplatform.gmb{background:#e8f5e9;color:#1b5e20;}
+.cl{list-style:none;}
+.cl li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--ink);padding:9px 0;border-bottom:1px solid var(--bd2);line-height:1.55;}
+.cl li:last-child{border-bottom:none;}
+.cl li::before{content:'□';font-size:14px;color:var(--acc);flex-shrink:0;line-height:1.2;margin-top:1px;}
+.plan-commit{background:#1a1107;padding:40px 0;}
+.plan-commit-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--acc-lt);margin-bottom:16px;}
+.plan-commit-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(201,164,106,.6);margin-bottom:8px;}
+.plan-commit-text{font-size:16px;font-weight:500;color:#fff;line-height:1.7;background:rgba(255,255,255,.07);border-left:3px solid var(--acc-lt);border-radius:6px;padding:14px 18px;}
+.plan-criteria{background:#1a1107;padding:0 0 48px;}
+.plan-criteria-inner{background:rgba(255,255,255,.05);border:1px solid rgba(201,164,106,.2);border-radius:10px;padding:18px 22px;}
+.plan-criteria-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--acc-lt);margin-bottom:8px;}
+.plan-criteria-text{font-size:12px;color:rgba(255,255,255,.65);line-height:1.7;}
+.plan-footer{background:#0d0a06;padding:20px 0;}
+.plan-footer-inner{max-width:900px;margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.25);}
+.plan-footer-inner strong{color:var(--acc-lt);}
+.plan-restart{max-width:900px;margin:0 auto;padding:24px 48px;display:flex;justify-content:center;}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:13px 24px;border-radius:10px;font-size:14px;z-index:9999;font-family:inherit;box-shadow:0 4px 24px rgba(0,0,0,.3);pointer-events:none;animation:toastIn .2s ease;white-space:nowrap;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+@media print{
+  @page{margin:0;}
+  body{background:#fff!important;}
+  .header,.app-wrap,.plan-bar,.plan-restart{display:none!important;}
+  #resultsView{display:block!important;}
+  .plan-hero,.plan-commit,.plan-criteria,.plan-footer{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .plan-sec{page-break-inside:avoid;}
+  .kpi,.pf-val,.proj-row{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .pf-val{box-shadow:none!important;}
+}
+@media(max-width:600px){.card{padding:24px 20px;}.frow,.frow3{grid-template-columns:1fr;}.steps-nav .sl{display:none;}.header{padding:12px 16px;}.xp-bg{width:80px;}.level-lbl{display:none;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 46 36" xmlns="http://www.w3.org/2000/svg" width="22" height="17">
+        <polygon points="3,5 11,5 23,30 15,30" fill="#f2ede0"/>
+        <polygon points="23,30 29,30 29,5 21,5" fill="#f2ede0"/>
+        <rect x="33" y="14" width="4" height="16" fill="#f2ede0" rx="1"/>
+        <path d="M33,17 C33,13 36,11 40,12 L43,12 L43,16 L40,16 C38,16 37,17 37,20" fill="#f2ede0"/>
+      </svg>
+    </div>
+    <span class="logo-name">Vértice Rio</span>
+  </div>
+  <div class="xp-wrap">
+    <span class="xp-tag">Plano</span>
+    <div class="xp-bg"><div class="xp-fill" id="xpFill"></div></div>
+    <span class="xp-pct" id="xpPct">0%</span>
+    <span class="level-lbl" id="levelLbl">Iniciante</span>
+  </div>
+</header>
+
+<div class="app-wrap" id="formWrap">
+  <div class="page-ttl">
+    <h1>Monte seu plano de ação</h1>
+    <p>Complete as 5 etapas e receba seu plano personalizado de campanhas</p>
+  </div>
+
+  <div class="steps-nav">
+    <button class="s-btn active" id="sBtn1" onclick="goStep(1)"><span class="si">🏢</span><span class="sl">Negócio</span></button>
+    <button class="s-btn locked"  id="sBtn2"><span class="si">🎯</span><span class="sl">Público</span></button>
+    <button class="s-btn locked"  id="sBtn3"><span class="si">🚧</span><span class="sl">Barreiras</span></button>
+    <button class="s-btn locked"  id="sBtn4"><span class="si">📊</span><span class="sl">Estratégia</span></button>
+    <button class="s-btn locked"  id="sBtn5"><span class="si">✊</span><span class="sl">Compromisso</span></button>
+  </div>
+
+  <div class="sp active" id="panel1">
+    <div class="card">
+      <div class="s-chip">Etapa 1 de 5</div>
+      <h2>Seu negócio</h2>
+      <p class="step-desc">Vamos partir do que você oferece. Quanto mais específico, mais certeiro será o plano.</p>
+      <div class="fg"><label for="nomeClinica">Nome da clínica / consultório *</label><input type="text" id="nomeClinica" placeholder="Ex: Clínica Estética Renovar"><div class="ferr" id="err_nomeClinica">Campo obrigatório</div></div>
+      <div class="frow">
+        <div class="fg"><label for="especialidade">Especialidade *</label><input type="text" id="especialidade" placeholder="Ex: Dermatologia, Odontologia"><div class="ferr" id="err_especialidade">Campo obrigatório</div></div>
+        <div class="fg"><label for="procedimentoAlvo">Procedimento / serviço alvo *</label><input type="text" id="procedimentoAlvo" placeholder="Ex: Botox, Clareamento dental"><div class="ferr" id="err_procedimentoAlvo">Campo obrigatório</div></div>
+      </div>
+      <hr class="divider">
+      <div class="fg"><div class="toggle-hd"><span class="flabel">Perfil do Instagram</span><button class="nao-btn" id="naoIG" onclick="toggleNao('instagram','naoIG')"><span class="dot"></span>Não tenho</button></div><input type="text" id="instagram" placeholder="@nome_do_perfil"></div>
+      <div class="frow">
+        <div class="fg"><div class="toggle-hd"><span class="flabel">Landing page</span><button class="nao-btn" id="naoLP" onclick="toggleNao('landingPage','naoLP')"><span class="dot"></span>Não tenho</button></div><input type="text" id="landingPage" placeholder="https://..."></div>
+        <div class="fg"><div class="toggle-hd"><span class="flabel">Google Meu Negócio</span><button class="nao-btn" id="naoGMB" onclick="toggleNao('gmb','naoGMB')"><span class="dot"></span>Não tenho</button></div><input type="text" id="gmb" placeholder="Nome no GMB ou link"></div>
+      </div>
+      <div class="snav"><span></span><button class="btn btn-acc" onclick="next(1)">Próxima etapa →</button></div>
+    </div>
+  </div>
+
+  <div class="sp" id="panel2">
+    <div class="card">
+      <div class="s-chip">Etapa 2 de 5</div>
+      <h2>Seu público</h2>
+      <p class="step-desc">Entender profundamente quem é essa pessoa é o que separa anúncios que convertem dos que só gastam budget.</p>
+      <div class="frow3">
+        <div class="fg"><label for="pubIdade">Faixa etária</label><input type="text" id="pubIdade" placeholder="Ex: 30–50 anos"></div>
+        <div class="fg"><label>Gênero</label><div class="rcs"><div class="rc"><input type="radio" name="genero" id="gF" value="Feminino"><label for="gF">Feminino</label></div><div class="rc"><input type="radio" name="genero" id="gM" value="Masculino"><label for="gM">Masculino</label></div><div class="rc"><input type="radio" name="genero" id="gT" value="Todos" checked><label for="gT">Todos</label></div></div></div>
+        <div class="fg"><label for="pubBairro">Bairro / região alvo</label><input type="text" id="pubBairro" placeholder="Ex: Ipanema, Leblon"></div>
+      </div>
+      <hr class="divider">
+      <div class="fg"><label for="pubMomento">O que essa pessoa está passando na vida para entrar em contato com você? *</label><textarea id="pubMomento" placeholder="Ex: Está se preparando para o verão e quer se sentir mais confiante..."></textarea><div class="ferr" id="err_pubMomento">Campo obrigatório</div></div>
+      <div class="fg"><label for="pubPorque">Por que ela precisa desse procedimento / serviço?</label><textarea id="pubPorque" placeholder="Ex: Quer eliminar marcas de expressão antes de um evento importante..."></textarea></div>
+      <div class="snav"><button class="btn btn-ghost" onclick="goStep(1)">← Voltar</button><button class="btn btn-acc" onclick="next(2)">Próxima etapa →</button></div>
+    </div>
+  </div>
+
+  <div class="sp" id="panel3">
+    <div class="card">
+      <div class="s-chip">Etapa 3 de 5</div>
+      <h2>Barreiras de conversão</h2>
+      <p class="step-desc">Antecipar objeções é o que transforma um anúncio em um argumento de venda irresistível.</p>
+      <div class="fg"><label for="barreiraO">O que faria essa pessoa desistir de fechar a consulta? *</label><textarea id="barreiraO" placeholder="Ex: Medo de dor, preço percebido como alto..."></textarea><div class="ferr" id="err_barreiraO">Campo obrigatório</div></div>
+      <div class="fg"><label for="barreiraSolucao">O que você poderia fazer para que ela não desistisse?</label><textarea id="barreiraSolucao" placeholder="Ex: Mostrar antes/depois reais, oferecer avaliação gratuita..."></textarea></div>
+      <div class="snav"><button class="btn btn-ghost" onclick="goStep(2)">← Voltar</button><button class="btn btn-acc" onclick="next(3)">Próxima etapa →</button></div>
+    </div>
+  </div>
+
+  <div class="sp" id="panel4">
+    <div class="card">
+      <div class="s-chip">Etapa 4 de 5</div>
+      <h2>Estratégia de canais</h2>
+      <p class="step-desc">Defina onde vai anunciar e os números que vão guiar o plano.</p>
+      <div class="fg">
+        <label>Canal que vai priorizar *</label>
+        <div class="rcs">
+          <div class="rc"><input type="radio" name="canal" id="cMeta"   value="Meta Ads"   onchange="onCanalChange()"><label for="cMeta">📘 Meta Ads</label></div>
+          <div class="rc"><input type="radio" name="canal" id="cGoogle" value="Google Ads" onchange="onCanalChange()"><label for="cGoogle">🔍 Google Ads</label></div>
+          <div class="rc"><input type="radio" name="canal" id="cAmbos"  value="Ambos"      onchange="onCanalChange()"><label for="cAmbos">⚡ Ambos</label></div>
+        </div>
+        <div class="ferr" id="err_canal">Selecione um canal</div>
+      </div>
+      <div class="fg" id="grp_budgetMeta" style="display:none;">
+        <label for="budgetMeta">Budget diário — Meta Ads *</label>
+        <div class="pfx-wrap"><span class="pfx">R$</span><input type="number" id="budgetMeta" placeholder="Ex: 30" min="0" step="0.01"></div>
+        <div class="ferr" id="err_budgetMeta">Campo obrigatório</div>
+      </div>
+      <div class="fg" id="grp_budgetGoogle" style="display:none;">
+        <label for="budgetGoogle">Budget diário — Google Ads *</label>
+        <div class="pfx-wrap"><span class="pfx">R$</span><input type="number" id="budgetGoogle" placeholder="Ex: 20" min="0" step="0.01"></div>
+        <div class="ferr" id="err_budgetGoogle">Campo obrigatório</div>
+      </div>
+      <hr class="divider">
+      <div class="frow">
+        <div class="fg"><label for="oferta">Oferta principal *</label><input type="text" id="oferta" placeholder="Ex: Avaliação gratuita"><div class="ferr" id="err_oferta">Campo obrigatório</div></div>
+        <div class="fg"><label for="prazoLancamento">Prazo para lançar a 1ª campanha</label><input type="text" id="prazoLancamento" placeholder="Ex: Em 15 dias"></div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label for="metaPacientes">Meta de novos pacientes / 30 dias *</label>
+          <div class="sfx-wrap"><input type="number" id="metaPacientes" placeholder="0" min="0"><span class="sfx">pacientes</span></div>
+          <div class="ferr" id="err_metaPacientes">Campo obrigatório</div>
+        </div>
+        <div class="fg">
+          <label for="cplEstimado">CPL estimado (custo por lead) *</label>
+          <div class="pfx-wrap"><span class="pfx">R$</span><input type="number" id="cplEstimado" placeholder="Ex: 25" min="0" step="0.01"></div>
+          <div class="fhint">Referência para saúde/estética: R$ 15–60</div>
+          <div class="ferr" id="err_cplEstimado">Campo obrigatório</div>
+        </div>
+      </div>
+      <div class="snav"><button class="btn btn-ghost" onclick="goStep(3)">← Voltar</button><button class="btn btn-acc" onclick="next(4)">Próxima etapa →</button></div>
+    </div>
+  </div>
+
+  <div class="sp" id="panel5">
+    <div class="card">
+      <div class="s-chip">Etapa 5 de 5 — Última!</div>
+      <h2>Seu compromisso</h2>
+      <p class="step-desc">Planos que não têm próximo passo concreto ficam na gaveta. Defina o seu agora.</p>
+      <div class="commit-box">
+        <div class="dl-tag">⏱ Nos próximos 10 dias</div>
+        <div class="flabel">Próximo passo concreto que vou tomar</div>
+        <textarea id="proximoPasso" placeholder="Ex: Contratar fotógrafo, criar conta no Meta Business Manager..." style="min-height:110px;"></textarea>
+        <div class="ferr" id="err_proximoPasso" style="color:#f0a0a0;">Campo obrigatório</div>
+      </div>
+      <div class="snav">
+        <button class="btn btn-ghost" onclick="goStep(4)">← Voltar</button>
+        <button class="btn btn-ink" id="showPlanBtn" onclick="buildPlan()">Ver meu plano →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="resultsView">
+  <div class="plan-bar">
+    <div class="plan-bar-inner">
+      <div class="plan-bar-brand">
+        <div class="logo-mark" style="width:30px;height:30px;border-radius:6px;flex-shrink:0;">
+          <svg viewBox="0 0 46 36" width="18" height="14"><polygon points="3,5 11,5 23,30 15,30" fill="#f2ede0"/><polygon points="23,30 29,30 29,5 21,5" fill="#f2ede0"/><rect x="33" y="14" width="4" height="16" fill="#f2ede0" rx="1"/><path d="M33,17 C33,13 36,11 40,12 L43,12 L43,16 L40,16 C38,16 37,17 37,20" fill="#f2ede0"/></svg>
+        </div>
+        <div style="margin-left:8px;">
+          <div class="plan-bar-client">Plano de Ação Digital</div>
+          <div class="plan-bar-name" id="barName"></div>
+        </div>
+      </div>
+      <div class="plan-bar-actions">
+        <button class="btn-print" onclick="printPlan()">🖨 Imprimir / Salvar PDF</button>
+        <button class="btn-wa" id="waBtn" onclick="sharePDF()">💬 Compartilhar no WhatsApp</button>
+      </div>
+    </div>
+  </div>
+  <div id="planContent"></div>
+  <div class="plan-restart">
+    <button class="btn btn-ghost" onclick="restart()" style="font-size:13px;">← Fazer novo plano</button>
+  </div>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>
