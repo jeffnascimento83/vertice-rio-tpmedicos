@@ -301,12 +301,6 @@ input.nao-off{opacity:.35;pointer-events:none;background:var(--surf2);}
           <div class="sfx-wrap"><input type="number" id="metaPacientes" placeholder="0" min="0"><span class="sfx">pacientes</span></div>
           <div class="ferr" id="err_metaPacientes">Campo obrigatório</div>
         </div>
-        <div class="fg">
-          <label for="cplEstimado">CPL estimado (custo por lead) *</label>
-          <div class="pfx-wrap"><span class="pfx">R$</span><input type="number" id="cplEstimado" placeholder="Ex: 25" min="0" step="0.01"></div>
-          <div class="fhint">Referência para saúde/estética: R$ 15–60</div>
-          <div class="ferr" id="err_cplEstimado">Campo obrigatório</div>
-        </div>
       </div>
       <div class="snav"><button class="btn btn-ghost" onclick="goStep(3)">← Voltar</button><button class="btn btn-acc" onclick="next(4)">Próxima etapa →</button></div>
     </div>
@@ -453,7 +447,7 @@ function buildPlan(){
   const bMetaM  = bMeta * 30;
   const bGoogleM= bGoogle * 30;
   const bTotalM = bTotal * 30;
-  const cpl     = num('cplEstimado');
+  const cpl     = 25; // Referência para healthcare: R$ 15-60
   const meta    = num('metaPacientes');
   const leadsM  = cpl > 0 ? Math.round(bTotalM / cpl) : 0;
   const convNec = leadsM > 0 ? ((meta / leadsM) * 100).toFixed(1) : '—';
