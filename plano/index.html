@@ -464,23 +464,47 @@ function cl(items){ return `<ul class="cl">${items.map(i=>`<li>${i}</li>`).join(
 function currency(n){ return 'R$ '+n.toLocaleString('pt-BR'); }
 function slug(s){ return s.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''); }
 
-function generateMetaCampaignStructure(esp, proc, meta){
+const SPECIALTY_INTERESTS = {
+  'cardiologia': ['saúde cardiovascular', 'prevenção de doenças cardíacas', 'bem-estar cardiovascular', 'fitness e saúde'],
+  'dermatologia': ['cuidados com pele', 'saúde dermatológica', 'estética natural', 'bem-estar e saúde'],
+  'odontologia': ['saúde bucal', 'estética dental', 'sorriso', 'cuidados dentários'],
+  'oftalmologia': ['saúde ocular', 'visão', 'bem-estar visual', 'cuidados com os olhos'],
+  'ortopedia': ['saúde articular', 'fitness', 'bem-estar físico', 'prevenção de lesões'],
+  'ginecologia': ['saúde feminina', 'bem-estar feminino', 'saúde reprodutiva', 'cuidados preventivos'],
+  'psicologia': ['saúde mental', 'bem-estar emocional', 'desenvolvimento pessoal', 'qualidade de vida'],
+  'nutrição': ['alimentação saudável', 'bem-estar nutricional', 'saúde preventiva', 'estilo de vida'],
+  'fisioterapia': ['reabilitação', 'saúde articular', 'bem-estar físico', 'prevenção de lesões']
+};
+
+function getSpecialtyInterests(esp){
+  const espLower = esp.toLowerCase();
+  for(const [key, interests] of Object.entries(SPECIALTY_INTERESTS)){
+    if(espLower.includes(key)) return interests;
+  }
+  return ['saúde', 'bem-estar', 'cuidados preventivos', 'qualidade de vida'];
+}
+
+function generateMetaCampaignStructure(esp, proc, meta, idade, genero, momento, porque){
   const slugEsp = slug(esp);
   const slugProc = slug(proc);
+  const interesses = getSpecialtyInterests(esp);
+  const idadeRange = idade && idade !== 'Não informado' ? idade : 'público geral';
+  const generoText = genero && genero !== 'Todos' ? genero.toLowerCase() : 'todos os gêneros';
+
   return {
     campaign: `META_CONV_${slugEsp.toUpperCase().substring(0,8)}_${new Date().toISOString().substring(0,7).replace('-','')}`,
     campaigns: [
-      {name:`META_CONV_${slugEsp}_Prospecting_${new Date().getFullYear()}`, audience:'Prospecting — interesse em saúde, beleza, bem-estar', creatives: 3},
+      {name:`META_CONV_${slugEsp}_Prospecting_${new Date().getFullYear()}`, audience:`Prospecting — interesse em ${interesses[0]}, ${interesses[1]}`, creatives: 3},
       {name:`META_CONV_${slugEsp}_Retargeting_${new Date().getFullYear()}`, audience:'Website visitors — visitantes da landing page', creatives: 2}
     ],
     adSets: [
-      {name:'Audiência Personalizada — 30-50 anos', targeting:'Gênero + Idade + Interesses relacionados'},
+      {name:`Audiência Personalizada — ${idadeRange}`, targeting:`${generoText.charAt(0).toUpperCase()+generoText.slice(1)} · ${idadeRange} · Interesses em ${interesses[0]}`},
       {name:'Lookalike — Similar à base de clientes', targeting:'1% Lookalike dos visitantes'}
     ],
     creativeThemes: [
-      '🎯 Resultado/Transformação: Antes e depois, depoimento, case de sucesso',
-      '⏰ Urgência: Promoção por tempo limitado, vagas limitadas',
-      '🤔 Educativo: Desmistificar procedimento, tirar dúvidas, segurança'
+      `🎯 Transformação: "${momento.substring(0,50)}..." → Mostrar como você resolve isso com "${proc}"`,
+      `✓ Educação: Desmistificar "${proc}" · Explicar benefícios · Tirar dúvidas sobre segurança`,
+      `💡 Confiança: Depoimentos · Antes/depois · Expertise e especialização`
     ]
   };
 }
@@ -555,7 +579,7 @@ function buildPlan(){
     date:    new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})
   };
 
-  d.metaCampaign = generateMetaCampaignStructure(d.esp, d.proc, d.metaMetaAds);
+  d.metaCampaign = generateMetaCampaignStructure(d.esp, d.proc, d.metaMetaAds, d.idade, d.genero, d.momento, d.porque);
   d.googleKeywords = generateGoogleKeywords(d.esp, d.proc, d.bairro, d.metaGoogleAds);
   d.adGroupStructure = generateAdGroupStructure(d.esp, d.proc, d.metaMetaAds);
 
