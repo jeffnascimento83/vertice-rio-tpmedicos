@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acesso — TP Médicos | Vértice Rio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #f0e9dc 0%, #faf7f2 100%);
+  color: #261a0c;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(38, 26, 12, 0.12);
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  gap: 12px;
+}
+
+.logo-mark {
+  width: 48px;
+  height: 48px;
+  background: #7d5f38;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #261a0c;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #261a0c;
+}
+
+.login-header p {
+  font-size: 14px;
+  color: #7a6a52;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: #7a6a52;
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid #d4c4a4;
+  border-radius: 10px;
+  background: #faf7f2;
+  color: #261a0c;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #7d5f38;
+  box-shadow: 0 0 0 3px rgba(125, 95, 56, 0.1);
+  background: #fff;
+}
+
+input.error {
+  border-color: #a83030;
+}
+
+.error-message {
+  color: #a83030;
+  font-size: 12px;
+  margin-top: 6px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: #7d5f38;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 28px;
+}
+
+.login-button:hover {
+  background: #52391a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(125, 95, 56, 0.2);
+}
+
+.login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.info-box {
+  background: #f0e9dc;
+  border: 1px solid #d4c4a4;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: #7a6a52;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.info-box strong {
+  color: #261a0c;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.loading {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: #7d5f38;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+  margin-left: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    margin: 20px;
+    padding: 30px 24px;
+  }
+
+  .login-header h1 {
+    font-size: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="logo-section">
+    <div class="logo-mark">VR</div>
+    <div class="logo-text">TP Médicos</div>
+  </div>
+
+  <div class="login-header">
+    <h1>Acesso Restrito</h1>
+    <p>Plataforma de Planejamento para Profissionais de Saúde</p>
+  </div>
+
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="username">Login</label>
+      <input
+        type="text"
+        id="username"
+        placeholder="Digite seu login"
+        autocomplete="username"
+        required
+      >
+      <div class="error-message" id="usernameError">Login inválido</div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Senha</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Digite sua senha"
+        autocomplete="current-password"
+        required
+      >
+      <div class="error-message" id="passwordError">Senha incorreta</div>
+    </div>
+
+    <button type="submit" class="login-button" id="loginBtn">
+      Acessar Plataforma
+    </button>
+  </form>
+
+  <div class="info-box">
+    <strong>Acesso Limitado</strong>
+    Apenas para participantes do treinamento de ontem
+  </div>
+</div>
+
+<script>
+const VALID_USER = 'treinamentovertice';
+const VALID_PASS = 'treinvert.123';
+const SESSION_KEY = 'tp_medicos_auth';
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('loginBtn');
+
+  // Clear previous errors
+  document.getElementById('usernameError').classList.remove('show');
+  document.getElementById('passwordError').classList.remove('show');
+  document.getElementById('username').classList.remove('error');
+  document.getElementById('password').classList.remove('error');
+
+  // Validation
+  let hasError = false;
+
+  if (!username) {
+    document.getElementById('usernameError').textContent = 'Login é obrigatório';
+    document.getElementById('usernameError').classList.add('show');
+    document.getElementById('username').classList.add('error');
+    hasError = true;
+  }
+
+  if (!password) {
+    document.getElementById('passwordError').textContent = 'Senha é obrigatória';
+    document.getElementById('passwordError').classList.add('show');
+    document.getElementById('password').classList.add('error');
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  // Show loading state
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Verificando' + Array(3).fill('.').join('');
+
+  // Simulate network delay
+  await new Promise(r => setTimeout(r, 500));
+
+  // Check credentials
+  if (username === VALID_USER && password === VALID_PASS) {
+    // Success - set session and redirect
+    sessionStorage.setItem(SESSION_KEY, 'true');
+    sessionStorage.setItem('tp_medicos_user', username);
+
+    // Show success and redirect
+    btn.textContent = '✓ Redirecionando...';
+    btn.style.background = '#3d6b4a';
+
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 800);
+  } else {
+    // Failure
+    btn.disabled = false;
+    btn.textContent = originalText;
+
+    if (username !== VALID_USER) {
+      document.getElementById('usernameError').textContent = 'Login não reconhecido';
+      document.getElementById('usernameError').classList.add('show');
+      document.getElementById('username').classList.add('error');
+    } else {
+      document.getElementById('passwordError').textContent = 'Senha incorreta';
+      document.getElementById('passwordError').classList.add('show');
+      document.getElementById('password').classList.add('error');
+    }
+  }
+});
+
+// Focus management
+document.getElementById('username').addEventListener('focus', () => {
+  document.getElementById('usernameError').classList.remove('show');
+  document.getElementById('username').classList.remove('error');
+});
+
+document.getElementById('password').addEventListener('focus', () => {
+  document.getElementById('passwordError').classList.remove('show');
+  document.getElementById('password').classList.remove('error');
+});
+
+// Check if already logged in
+if (sessionStorage.getItem(SESSION_KEY) === 'true') {
+  window.location.href = '/';
+}
+</script>
+
+</body>
+</html>
