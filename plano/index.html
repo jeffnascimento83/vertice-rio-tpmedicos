@@ -322,10 +322,22 @@ input.nao-off{opacity:.35;pointer-events:none;background:var(--surf2);}
       <h2>Seu compromisso</h2>
       <p class="step-desc">Planos que não têm próximo passo concreto ficam na gaveta. Defina o seu agora.</p>
       <div class="commit-box">
-        <div class="dl-tag">⏱ Nos próximos 10 dias</div>
-        <div class="flabel">Próximo passo concreto que vou tomar</div>
-        <textarea id="proximoPasso" placeholder="Ex: Contratar fotógrafo, criar conta no Meta Business Manager..." style="min-height:110px;"></textarea>
-        <div class="ferr" id="err_proximoPasso" style="color:#f0a0a0;">Campo obrigatório</div>
+        <div class="dl-tag">⏱ Nos próximos 10 dias — Selecione pelo menos 1</div>
+        <div class="flabel" style="margin-top:14px;">Próximos passos — O que vou fazer primeiro?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">
+          <div class="rc"><input type="checkbox" id="passoFotos" name="passos" value="Tirar fotos profissionais"><label for="passoFotos">📸 Tirar fotos profissionais</label></div>
+          <div class="rc"><input type="checkbox" id="passoIG" name="passos" value="Reorganizar meu Instagram"><label for="passoIG">📱 Reorganizar meu Instagram</label></div>
+          <div class="rc"><input type="checkbox" id="passoDor" name="passos" value="Produzir vídeos com foco na 'dor' do paciente"><label for="passoDor">😢 Vídeos: a 'dor'</label></div>
+          <div class="rc"><input type="checkbox" id="passoSolucao" name="passos" value="Produzir vídeos com foco na solução"><label for="passoSolucao">✅ Vídeos: solução</label></div>
+          <div class="rc"><input type="checkbox" id="passoObjecoes" name="passos" value="Produzir vídeos com foco em quebra de objeções"><label for="passoObjecoes">🛡️ Vídeos: objeções</label></div>
+          <div class="rc"><input type="checkbox" id="passoLP" name="passos" value="Fazer uma landingpage"><label for="passoLP">🌐 Fazer uma landingpage</label></div>
+          <div class="rc"><input type="checkbox" id="passoOutro" name="passos" value="outro"><label for="passoOutro">➕ Outro</label></div>
+        </div>
+        <div id="passoOutroField" style="display:none;margin-top:14px;">
+          <label for="passoOutroTexto" class="flabel">Qual será seu próximo passo?</label>
+          <textarea id="passoOutroTexto" placeholder="Descreva seu próximo passo..." style="min-height:80px;"></textarea>
+        </div>
+        <div class="ferr" id="err_proximoPasso" style="color:#f0a0a0;margin-top:10px;">Selecione pelo menos um passo</div>
       </div>
       <div class="snav">
         <button class="btn btn-ghost" onclick="goStep(4)">← Voltar</button>
@@ -398,13 +410,18 @@ function next(step){
 }
 
 function validate(step){
-  const req={1:['nomeClinica','especialidade','procedimentoAlvo'],2:['pubMomento'],3:['barreiraO'],4:[],5:['proximoPasso']};
+  const req={1:['nomeClinica','especialidade','procedimentoAlvo'],2:['pubMomento'],3:['barreiraO'],4:[],5:[]};
   let ok=true;
   (req[step]||[]).forEach(id=>{
     const el=document.getElementById(id),er=document.getElementById('err_'+id);
     if(!el||!el.value.trim()){ if(el) el.classList.add('has-err'); if(er) er.classList.add('show'); ok=false; }
     else{ el.classList.remove('has-err'); if(er) er.classList.remove('show'); }
   });
+  if(step===5){
+    const checked = document.querySelectorAll('input[name="passos"]:checked').length;
+    const er = document.getElementById('err_proximoPasso');
+    if(checked===0){ er.classList.add('show'); ok=false; } else er.classList.remove('show');
+  }
   if(step===4){
     const canal=(document.querySelector('input[name="canal"]:checked')||{}).value||'';
     const ce=document.getElementById('err_canal');
@@ -426,6 +443,11 @@ function validate(step){
 
 document.querySelectorAll('input,textarea').forEach(el=>{
   el.addEventListener('input',()=>{ el.classList.remove('has-err'); const er=document.getElementById('err_'+el.id); if(er) er.classList.remove('show'); });
+});
+
+document.getElementById('passoOutro').addEventListener('change', ()=>{
+  const checked = document.getElementById('passoOutro').checked;
+  document.getElementById('passoOutroField').style.display = checked ? 'block' : 'none';
 });
 
 function toggleNao(inputId,btnId){
@@ -506,6 +528,11 @@ function buildPlan(){
   const convNec = leadsM > 0 ? ((meta / leadsM) * 100).toFixed(1) : '—';
   const cpa     = meta > 0 ? (bTotalM / meta).toFixed(0) : '—';
 
+  const passosSelecionados = Array.from(document.querySelectorAll('input[name="passos"]:checked')).map(el=>{
+    if(el.value==='outro'){ return v('passoOutroTexto')||'Outro (não especificado)'; }
+    return el.value;
+  });
+
   const d = {
     nome:    v('nomeClinica'),
     esp:     v('especialidade'),
@@ -524,7 +551,7 @@ function buildPlan(){
     prazo:   v('prazoLancamento')||'A definir',
     meta, metaMetaAds, metaGoogleAds, metaGMB, cpl, leadsM, convNec, cpa,
     bMeta, bGoogle, bTotal, bMetaM, bGoogleM, bTotalM,
-    passo:   v('proximoPasso'),
+    passos:  passosSelecionados,
     date:    new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})
   };
 
@@ -747,8 +774,8 @@ function buildPlan(){
     <div class="plan-commit">
       <div class="plan-inner">
         <div class="plan-commit-tag">⏱ Compromisso — Próximos 10 Dias</div>
-        <div class="plan-commit-lbl">Próximo passo concreto</div>
-        <div class="plan-commit-text">${d.passo}</div>
+        <div class="plan-commit-lbl">Próximos passos que vou tomar</div>
+        ${cl(d.passos)}
       </div>
     </div>
 
