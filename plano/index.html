@@ -788,12 +788,19 @@ async function sharePDF(){
     const content = document.getElementById('planContent');
     const fname = planData ? `plano-acao-${slug(planData.nome)}.pdf` : 'plano-acao.pdf';
     const pdf = await html2pdf().set({
-      margin: 0,
+      margin: 10,
       filename: fname,
-      image: { type:'jpeg', quality:0.92 },
-      html2canvas: { scale:2, useCORS:true, logging:false, backgroundColor:'#f0e9dc' },
-      jsPDF: { unit:'px', format:'a4', orientation:'portrait', hotfixes:['px_scaling'] },
-      pagebreak: { mode:['css','legacy'] }
+      image: { type:'jpeg', quality:0.85 },
+      html2canvas: {
+        scale:1.5,
+        useCORS:true,
+        allowTaint:true,
+        logging:false,
+        backgroundColor:'#ffffff',
+        timeout:10000
+      },
+      jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
+      pagebreak: { mode:['avoid-all','css'] }
     }).from(content).outputPdf('blob');
 
     const file = new File([pdf], fname, { type:'application/pdf' });
