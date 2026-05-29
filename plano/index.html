@@ -261,7 +261,7 @@ input.nao-off{opacity:.35;pointer-events:none;background:var(--surf2);}
       <h2>Barreiras de conversão</h2>
       <p class="step-desc">Antecipar objeções é o que transforma um anúncio em um argumento de venda irresistível.</p>
       <div class="fg"><label for="barreiraO">O que faria essa pessoa desistir de fechar a consulta? *</label><textarea id="barreiraO" placeholder="Ex: Medo de dor, preço percebido como alto..."></textarea><div class="ferr" id="err_barreiraO">Campo obrigatório</div></div>
-      <div class="fg"><label for="barreiraSolucao">O que você poderia fazer para que ela não desistisse?</label><textarea id="barreiraSolucao" placeholder="Ex: Mostrar antes/depois reais, oferecer avaliação gratuita..."></textarea></div>
+      <div class="fg"><label for="barreiraSolucao">O que você poderia fazer para que ela não desistisse?</label><textarea id="barreiraSolucao" placeholder="Ex: Mostrar antes/depois reais, facilitar agendamento, explicar o processo..."></textarea></div>
       <div class="snav"><button class="btn btn-ghost" onclick="goStep(2)">← Voltar</button><button class="btn btn-acc" onclick="next(3)">Próxima etapa →</button></div>
     </div>
   </div>
@@ -292,7 +292,7 @@ input.nao-off{opacity:.35;pointer-events:none;background:var(--surf2);}
       </div>
       <hr class="divider">
       <div class="frow">
-        <div class="fg"><label for="oferta">Oferta principal *</label><input type="text" id="oferta" placeholder="Ex: Avaliação gratuita" title="Atendimento médico com acolhimento"><div class="ferr" id="err_oferta">Campo obrigatório</div></div>
+        <div class="fg"><label for="oferta">Proposta de valor / Diferencial *</label><input type="text" id="oferta" placeholder="Ex: Atendimento personalizado, tecnologia avançada, resultado garantido" title="Atendimento médico com acolhimento"><div class="ferr" id="err_oferta">Campo obrigatório</div></div>
         <div class="fg"><label for="prazoLancamento">Prazo para lançar a 1ª campanha</label><input type="text" id="prazoLancamento" placeholder="Ex: Em 15 dias"></div>
       </div>
       <div class="frow3">
@@ -589,7 +589,7 @@ function buildPlan(){
     <div class="proj-row">
       <div class="proj-title">Projeção de Resultados — 30 Dias</div>
       <div class="proj-grid">
-        <div class="proj-item"><div class="proj-v highlight">${d.leadsM}</div><div class="proj-l">Leads Projetados / Mês</div></div>
+        <div class="proj-item"><div class="proj-v highlight">${d.leadsM}</div><div class="proj-l">Contatos Qualificados / Mês</div></div>
         <div class="proj-item"><div class="proj-v">${d.meta}</div><div class="proj-l">Meta de Pacientes</div></div>
         <div class="proj-item"><div class="proj-v">${d.convNec}%</div><div class="proj-l">Taxa de Conversão Necessária</div></div>
         <div class="proj-item"><div class="proj-v">${currency(parseFloat(d.cpa)||0)}</div><div class="proj-l">CPA Alvo Estimado</div></div>
@@ -637,7 +637,7 @@ function buildPlan(){
         ${secTitle('04','Estratégia e Projeção')}
         <div class="kpi-row">${kpiHtml}</div>
         ${projHtml}
-        <div class="pg3">${fld('Oferta Principal',d.oferta)}${fld('CPL Estimado',currency(d.cpl))}${fld('Prazo para 1ª Campanha',d.prazo)}</div>
+        <div class="pg3">${fld('Proposta de Valor',d.oferta)}${fld('CPL Estimado',currency(d.cpl))}${fld('Prazo para 1ª Campanha',d.prazo)}</div>
       </div></div>
 
       <div class="plan-sec"><div class="plan-inner">
@@ -688,7 +688,7 @@ function buildPlan(){
         <div class="pg2">
           <div>
             ${fld('Budget',`${currency(d.bMeta)}/dia · ${currency(d.bMetaM)}/mês`)}
-            ${fld('Objetivo de Campanha','Geração de Leads (formulário ou mensagem)')}
+            ${fld('Objetivo de Campanha','Captação de Pacientes (formulário de agendamento ou mensagem direto)')}
             ${fld('Estrutura',`CBO · 1 conjunto de anúncios · 3 variações`)}
             ${fld('Segmentação',`${d.genero!=='Todos'?d.genero+' · ':''}${d.idade!=='Não informado'?d.idade+' · ':''}${d.bairro}`)}
             ${fld('Hook de Copy',`Baseado em: "${d.momento.substring(0,80)}${d.momento.length>80?'...':'"'}`)}
@@ -698,7 +698,7 @@ function buildPlan(){
             ${cl([
               'Criar / auditar Business Portfolio e conta de anúncios',
               'Instalar Pixel Meta na landing page',
-              'Configurar evento <strong>Lead</strong> e testar com Pixel Helper',
+              'Configurar evento <strong>Agendamento</strong> (ou Lead) e testar com Pixel Helper',
               'Vincular conta de Instagram à página',
               'Produzir 3 criativos: Reels + Feed estático + Stories',
               'Configurar UTMs por criativo para rastreamento',
@@ -750,13 +750,13 @@ function buildPlan(){
               'Adicionar endereço, telefone e horário',
               'Upload de 10+ fotos (fachada, equipe, consultório)',
               `Descrição mencionando "${d.proc}" e "${d.oferta}"`,
-              'Publicar primeiro Post com a oferta da campanha',
+              'Publicar primeiro Post apresentando seu diferencial',
               'Solicitar avaliação dos próximos 5 pacientes'
             ]:[
               `Auditar completude: foto, descrição, horário, telefone`,
               `Atualizar categoria para <strong>${d.esp}</strong>`,
               `Adicionar "${d.proc}" como serviço`,
-              'Publicar Post semanal com oferta ou conteúdo educativo',
+              'Publicar Post semanal com conteúdo educativo ou casos de sucesso',
               'Responder avaliações pendentes em até 24h',
               'Verificar vinculação ao Google Ads',
               'Solicitar avaliação ativa dos próximos pacientes'
@@ -764,7 +764,7 @@ function buildPlan(){
           </div>
           <div>
             ${fld('Por Que o GMB É Estratégico','Pacientes com intenção local buscam no Google antes de ligar. Um perfil otimizado gera visitas orgânicas sem custo de mídia — reforça qualquer campanha paga.')}
-            ${fld('Frequência de Posts','1 post/semana com oferta ou conteúdo educativo. Responder avaliações em até 24h para sinal positivo ao algoritmo.')}
+            ${fld('Frequência de Posts','1 post/semana com conteúdo educativo, casos de sucesso ou insights da especialidade. Responder avaliações em até 24h para sinal positivo ao algoritmo.')}
           </div>
         </div>
       </div></div>
